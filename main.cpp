@@ -22,3 +22,7 @@ int main() {
     ip.close();
     return 0;
 }
+
+void doExercise1(){
+    // add your code here
+}
