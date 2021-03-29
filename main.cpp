@@ -2,6 +2,11 @@
 #include <fstream>
 
 using namespace std;
+
+// Function declarations:
+void showTeamInformation();
+
+// Main function:
 int main() {
     string filePath;
 
@@ -47,7 +52,17 @@ int main() {
     }
 
     ip.close();
+    showTeamInformation();
     return 0;
+}
+
+// Function detail:
+void showTeamInformation(){
+    cout << "ASSIGNMENT 1GROUP<TT>" << endl
+    << "s3634831,s3634831@rmit.edu.vn, Bui , Phuoc" << endl
+    << "s3695656,s3695656@rmit.edu.vn, Nguyen , Trung" << endl
+    << "s3879954,s3879954@rmit.edu.vn, Tran,Nhung" << endl
+    << "s3877981,s3877981@rmit.edu.vn, Ngo , Nguyet" << endl;
 }
 
 void doExercise1(){
