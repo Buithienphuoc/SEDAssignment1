@@ -17,6 +17,7 @@ int main() {
     //find number of lines to allocate memory for the array of x and y
     int count_line = 0;
     string x_str, y_str;
+
     while(ip.good() && !ip.eof()){
         getline(ip, x_str, '\n');
         count_line ++;
@@ -38,6 +39,11 @@ int main() {
         *(x_arr + i) = stoi(x_str);
         *(y_arr + i) = stoi(y_str);
         i ++;
+    }
+
+    //output array
+    for (int index = 0; index < count_line; index ++) {
+        cout << *(x_arr + index) << *(y_arr + index) << endl;
     }
 
     ip.close();
