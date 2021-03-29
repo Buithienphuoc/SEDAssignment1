@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/phuoc/CLionProjects/assignment-1/main.cpp
+/Users/toranashitanhung/CLionProjects/SEDAssignment1/main.cpp
 iostream
 -
 fstream
