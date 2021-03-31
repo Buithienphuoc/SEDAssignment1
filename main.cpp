@@ -2,14 +2,14 @@
 #include <string.h>
 #include <fstream>
 #include <cmath>
-//#include <iomanip>
+#include <iomanip>
 
 using namespace std;
 
-class Contents{
+typedef struct {
     public:
         int x, y;
-};
+} Contents;
 
 void showTeamInformation(){
     cout << "ASSIGNMENT 1GROUP<TT>" << endl
@@ -51,18 +51,9 @@ void storeFileIntoArrays(Contents *array, string str, string str2, ifstream& ip)
     while (ip.good()) {
         getline(ip, str, ',');
         array[index].x = strToInt(str);
-        cout <<"num: " <<array[index].x <<endl;
         getline(ip, str2, '\n');
         array[index].y = strToInt(str2);
         index ++;
-    }
-}
-void outArray(Contents *array, int count_line) {
-    cout << "The array: \n";
-    for (int index = 0; index < count_line; index ++) {
-        cout << setw(4) << array[index].x
-             << setw(4) << "||"
-             << setw(4) << array[index].y << endl;
     }
 }
 void doExercise1(){
