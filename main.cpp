@@ -1,55 +1,89 @@
 #include <iostream>
+#include <string.h>
 #include <fstream>
+#include <cmath>
+#include <iomanip>
 
 using namespace std;
 
-// Function declarations:
-void showTeamInformation();
+typedef struct {
+    public:
+        int x, y;
+} Contents;
+
+void showTeamInformation(){
+    cout << "ASSIGNMENT 1GROUP<TT>" << endl
+         << "s3634831,s3634831@rmit.edu.vn, Bui , Phuoc" << endl
+         << "s3695656,s3695656@rmit.edu.vn, Nguyen , Trung" << endl
+         << "s3879954,s3879954@rmit.edu.vn, Tran,Nhung" << endl
+         << "s3877981,s3877981@rmit.edu.vn, Ngo , Nguyet" << endl;
+}
+void openFile(const string& filePath, ifstream& ip) {
+    ip.open(filePath, ios::in);
+    if (!ip.is_open()) {
+        showTeamInformation();
+        cerr << "ERROR: File Open" << endl;
+    }
+}
+int findNumberOfLines(string x, ifstream& ip) {
+    int count = 0;
+    while (ip.good()) {
+        getline(ip, x, '\n');
+        count ++;
+    }
+    return count;
+}
+void returnToBeginOfFile(ifstream& ip) {
+    ip.clear();
+    ip.seekg(1);
+}
+int strToInt(string str) {
+    int index = 0, num = 0, dec = pow(10, str.size())/10;
+    while (str[index] != '\0') {
+        num += ((str[index] - '0') * dec);
+        dec /= 10;
+        index ++;
+    }
+    return num;
+}
+void storeFileIntoArrays(Contents *array, string str, string str2, ifstream& ip) {
+    int index = 0; //run index 1++, b/c index 0 is 'x','y'
+    while (ip.good()) {
+        getline(ip, str, ',');
+        array[index].x = strToInt(str);
+        getline(ip, str2, '\n');
+        array[index].y = strToInt(str2);
+        index ++;
+    }
+}
+void doExercise1(){
+    // add your code here
+}
 
 // Main function:
 int main() {
-    string filePath;
+    ifstream ip;
+    //declare variables
+    string filePath, str, str2;
+    int count_line;
+    Contents *array;
 
     //ask user to input file's address
     cout << "Hi Dr.Minh Dinh, please type your ABSOLUTE PATH of your file:";
     cin >> filePath;
 
-    //open files for reading
-    ifstream ip;
-    ip.open(filePath, ios::in);
-    if (!ip.is_open()) cerr << "ERROR: File Open" << endl;
+    //open the file for reading
+    openFile(filePath, ip);
 
-    //find number of lines to allocate memory for the array of x and y
-    int count_line = 0;
-    string x_str, y_str;
-
-    while(ip.good() && !ip.eof()){
-        getline(ip, x_str, '\n');
-        count_line ++;
-    }
-
-    //return to the begin of the file
-    ip.clear();
-    ip.seekg(0);
-
-    //create arrays of x and y with dynamic allocation
-    int *x_arr, *y_arr;
-    x_arr = new int[count_line], y_arr = new int[count_line];
-
-    //read the file and input the contents into the arrays
-    int i = 0;
-    while (ip.good() && !ip.eof()) {
-        getline(ip, x_str, ',');
-        getline(ip, y_str, '\n');
-        *(x_arr + i) = stoi(x_str);
-        *(y_arr + i) = stoi(y_str);
-        i ++;
-    }
+    //start inputting the program contents of csv file
+    count_line = findNumberOfLines(str, ip);
+    returnToBeginOfFile(ip);
+    // create array to store x and y with dynamic memory allocation
+    array = new Contents[count_line];
+    storeFileIntoArrays(array, str, str2, ip);
 
     //output array
-    for (int index = 0; index < count_line; index ++) {
-        cout << *(x_arr + index) << *(y_arr + index) << endl;
-    }
+    // outArray(array, count_line);
 
     ip.close();
     showTeamInformation();
@@ -57,14 +91,3 @@ int main() {
 }
 
 // Function detail:
-void showTeamInformation(){
-    cout << "ASSIGNMENT 1GROUP<TT>" << endl
-    << "s3634831,s3634831@rmit.edu.vn, Bui , Phuoc" << endl
-    << "s3695656,s3695656@rmit.edu.vn, Nguyen , Trung" << endl
-    << "s3879954,s3879954@rmit.edu.vn, Tran,Nhung" << endl
-    << "s3877981,s3877981@rmit.edu.vn, Ngo , Nguyet" << endl;
-}
-
-void doExercise1(){
-    // add your code here
-}
