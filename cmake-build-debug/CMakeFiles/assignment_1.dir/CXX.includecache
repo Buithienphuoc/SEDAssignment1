@@ -9,6 +9,10 @@
 /Users/toranashitanhung/CLionProjects/SEDAssignment1/main.cpp
 iostream
 -
+string.h
+-
 fstream
+-
+cmath
 -
 
