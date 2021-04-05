@@ -1,15 +1,8 @@
 #include <iostream>
-#include <string.h>
 #include <fstream>
 #include <cmath>
-#include <iomanip>
 
 using namespace std;
-
-typedef struct {
-    public:
-        int x, y;
-} Answers;
 
 void showTeamInformation(){
     cout << "ASSIGNMENT 1GROUP<TT>" << endl
@@ -47,25 +40,32 @@ int strToInt(string str) {
     return num;
 }
 void storeFileIntoArrays(int *array_x, int *array_y, string str, ifstream& ip) {
-    int index = 0; //run index 1++, b/c index 0 is 'x','y'
-    while (ip.good()) {
+    int index = 0; //run i 1++, b/c i 0 is 'x','y'
+    while (!ip.eof()) {
         getline(ip, str, ',');
         array_x[index] = strToInt(str);
         getline(ip, str, '\n');
         array_y[index] = strToInt(str);
         index ++;
     }
-}
-void doExercise1(){
+    cout << "Number of line:" <<index << endl;
 
+    for (int element = 1; element < index ; element++){
+        cout << element << " place of Array X:" << array_x[element] << endl
+             << element << " place of Array Y:" << array_y[element] << endl
+             << "--------------------------" << endl;
+    }
 }
 
 // Main function:
 int main() {
-    ifstream ip;
     //declare variables
+    ifstream ip;
     string filePath, str, str2;
     int count_line, *array_x, *array_y;
+    count_line = findNumberOfLines(str, ip);
+    array_x = new int[count_line];
+    array_y = new int[count_line];
 
     //ask user to input file's address
     cout << "Hi Dr.Minh Dinh, please type your ABSOLUTE PATH of your file:";
@@ -75,19 +75,13 @@ int main() {
     openFile(filePath, ip);
 
     //start inputting the program contents of csv file
-    count_line = findNumberOfLines(str, ip);
     returnToBeginOfFile(ip);
     // create array to store x and y with dynamic memory allocation
-    array_x = new int[count_line];
-    array_y = new int[count_line];
-    storeFileIntoArrays(array_x, array_y, str, ip);
 
-    //output array
-    // outArray(array, count_line);
+    storeFileIntoArrays(array_x, array_y, str, ip);
 
     ip.close();
     showTeamInformation();
     return 0;
 }
 
-// Function detail:
