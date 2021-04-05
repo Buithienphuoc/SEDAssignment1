@@ -9,7 +9,7 @@ using namespace std;
 typedef struct {
     public:
         int x, y;
-} Contents;
+} Answers;
 
 void showTeamInformation(){
     cout << "ASSIGNMENT 1GROUP<TT>" << endl
@@ -46,18 +46,18 @@ int strToInt(string str) {
     }
     return num;
 }
-void storeFileIntoArrays(Contents *array, string str, string str2, ifstream& ip) {
+void storeFileIntoArrays(int *array_x, int *array_y, string str, ifstream& ip) {
     int index = 0; //run index 1++, b/c index 0 is 'x','y'
     while (ip.good()) {
         getline(ip, str, ',');
-        array[index].x = strToInt(str);
-        getline(ip, str2, '\n');
-        array[index].y = strToInt(str2);
+        array_x[index] = strToInt(str);
+        getline(ip, str, '\n');
+        array_y[index] = strToInt(str);
         index ++;
     }
 }
 void doExercise1(){
-    // add your code here
+
 }
 
 // Main function:
@@ -65,8 +65,7 @@ int main() {
     ifstream ip;
     //declare variables
     string filePath, str, str2;
-    int count_line;
-    Contents *array;
+    int count_line, *array_x, *array_y;
 
     //ask user to input file's address
     cout << "Hi Dr.Minh Dinh, please type your ABSOLUTE PATH of your file:";
@@ -79,8 +78,9 @@ int main() {
     count_line = findNumberOfLines(str, ip);
     returnToBeginOfFile(ip);
     // create array to store x and y with dynamic memory allocation
-    array = new Contents[count_line];
-    storeFileIntoArrays(array, str, str2, ip);
+    array_x = new int[count_line];
+    array_y = new int[count_line];
+    storeFileIntoArrays(array_x, array_y, str, ip);
 
     //output array
     // outArray(array, count_line);
