@@ -6,10 +6,6 @@
 
 using namespace std;
 
-typedef struct {
-        int x, y;
-} answers;
-
 void showTeamInformation(){
     cout << "ASSIGNMENT 1GROUP<TT>" << endl
          << "s3634831,s3634831@rmit.edu.vn, Bui , Phuoc" << endl
@@ -55,107 +51,80 @@ void storeFileIntoArrays(int *array_x, int *array_y, string str, ifstream& ip) {
         index ++;
     }
 }
+
 ////Math functions:
 
-answers mean(int *array_x, int *array_y, int countLine) {
-    answers m;
-    int sum_x = 0, sum_y = 0;
-    for (int i = 0; i < countLine; i ++) {
-        sum_x += array_x[i];
-        sum_y += array_y[i];
+double mean(int *array, int countLine) {
+    int sum = 0;
+    for (int i = 1; i < countLine; i ++) {
+        sum += array[i];
     }
-    m.x = sum_x / countLine;
-    m.y = sum_y / countLine;
-    return m;
+    return (sum / countLine);
 }
 
-double median(int* array_x, int* array_y, int countLine) {
+double median(int *array, int countLine) {
 
     if (countLine % 2 != 0) {
-        return array_x[countLine / 2];
-        return array_y[countLine / 2];
+        return array[countLine / 2];
     } else {
-        return (array_x[(countLine - 1) / 2] + array_x[countLine / 2]) / 2;
-        return (array_y[(countLine - 1) / 2] + array_y[countLine / 2]) / 2;
+        return (double)(array[(countLine - 1) / 2] + array[countLine / 2]) / 2;
     }
 }
 ////Function to calculate Variance
-answers variance(int* array_x, int* array_y, int countLine) {
-    answers vari;
+double variance(int* array, int countLine) {
     // Compute sum squared
     // differences with mean.
-    double squaredDiff_x = 0;
-    double squaredDiff_y = 0;
-    for (int i = 0; i < countLine; i++) {
-        squaredDiff_x += (array_x[i] - mean) * (array_x[i] - mean);
-        squaredDiff_y += (array_y[i] - mean) * (array_y[i] - mean);
+    double squaredDiff = 0, m = mean(array, countLine);
+    for (int i = 1; i < countLine; i++) {
+        squaredDiff += (array[i] - m) * (array[i] - m);
     }
-    vari.x = squaredDiff_x / countLine;
-    vari.y = squaredDiff_y / countLine;
-    return vari;
-    }
-
-    ////Function to calculate Deviation
-    answers standardDeviation(int* array_x, int* array_y, int countLine, answers variance) {
-        answers stdDevi;
-        stdDevi.x = sqrt(variance(array_x, countLine));
-        stdDevi.y = sqrt(variance(array_y, countLine));
-        return stdDevi;
-    }
-
-    //Function to calculate MAD
-    answers meanAbsoluteDeviation(int* array_x, int* array_y, int countLine, answers mean) {
-        answers MAD;
-        float absSum_x = 0;
-        float absSum_y = 0;
-        for (int i = 0; i < countLine; i++) {
-            absSum_x = absSum_x + abs(array_x[i] - mean(array_x, countLine));
-            absSum_y = absSum_y + abs(array_y[i] - mean(array_y, countLine));
-        }
-        // Return mean absolute deviation about mean.
-        MAD.x = absSum_x / countLine;
-        MAD.y = absSum_y / countLine;
-        return MAD;
-    }
-
-    ////Function to calculate First Quartile
-
-
-    //// Function to calculate skewness.
-
-    answers skewness(int* array_x, int* array_y, int countLine){
-        answers skew;
-        float sum_x = 0;
-        float sum_y = 0;
-        for (int i = 0; i < countLine; i++) {
-            sum_x = (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine));
-            sum_y = (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine));
-        }
-        skew.x = sum_x / (countLine * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine));
-        skew.y = sum_y / (countLine * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine));
-        return skew;
-    }
-
-    ////Function to calculate Kurtosis
-    answers kurtosis(int* array_x, int* array_y, int countLine) {
-        answers kurt;
-        float sum_x = 0;
-        float sum_y = 0;
-        double kurtosis_x = 0;
-        double kurtosis_y = 0;
-        for (int i = 0; i < countLine; i++) {
-            sum_x = (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine));
-            sum_y = (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine));
-        }
-        kurt.x = (sum_x / (countLine * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine))) - 3;
-        kurt.y = (sum_y / (countLine * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine))) - 3;
-        return kurt;
-    }
+    return (squaredDiff / countLine);
 }
-double covariance(int *array_x, int *array_y, answers median, int countLine) {
-    double sum = 0;
+
+////Function to calculate Deviation
+double standardDeviation(int* array, int countLine) {
+    double var = variance(array, countLine);
+    return sqrt(var);
+}
+
+//Function to calculate MAD
+double meanAbsoluteDeviation(int* array, int countLine) {
+    double m = mean(array, countLine), absSum = 0;
+    for (int i = 0; i < countLine; i++) {
+        absSum += abs(array[i] - m);
+    }
+    // Return mean absolute deviation about mean.
+    return (absSum / countLine);
+}
+
+////Function to calculate First Quartile
+
+
+//// Function to calculate skewness.
+double skewness(int* array, int countLine){
+    double sum = 0, m = mean(array, countLine), skew;
+    for (int i = 0; i < countLine; i++)
+        sum = (array[i] - m) * (array[i] - mean(array, countLine)) * (array[i] - mean(array, countLine));
+    skew = sum / (countLine * standardDeviation(array, countLine) * standardDeviation(array, countLine) * standardDeviation(array, countLine) * standardDeviation(array, countLine));
+    return skew;
+}
+
+////Function to calculate Kurtosis
+double kurtosis(int* array, int countLine) {
+    double sum = 0, kurt;
+    for (int i = 0; i < countLine; i++) {
+        sum = (array[i] - mean(array, countLine)) * (array[i] - mean(array, countLine)) *
+                (array[i] - mean(array, countLine)) * (array[i] - mean(array, countLine));
+
+    }
+    kurt = (sum / (countLine * standardDeviation(array, countLine) * standardDeviation(array, countLine) * standardDeviation(array, countLine) * standardDeviation(array, countLine) * standardDeviation(array, countLine))) - 3;
+    return kurt;
+}
+
+double covariance(int *array_x, int *array_y, int countLine) {
+    double sum = 0, m_x = mean(array_x, countLine), m_y = mean(array_y, countLine);
     for (int index = 1; index < countLine; index ++) {
-        sum += ((array_x[index] - median.x)*(array_y[index] - median.y));
+        sum += ((array_x[index] - m_x)*(array_y[index] - m_y));
     }
     return (sum / (countLine - 1));
 }
@@ -177,13 +146,14 @@ double coefficient(int *array_x, int *array_y, int countLine) {
 void linearRegression(int *array_x, int *array_y, int countLine) {
     //initialize the variables
     double r = coefficient(array_x, array_y, countLine), slope, intercept;
-    answers m = mean(array_x, array_y, countLine), stdev = standardDeviation(array_x, array_y, countLine);
+    double m_x = mean(array_x, countLine), m_y = mean(array_y, countLine);
+    double stdev_x = standardDeviation(array_x, countLine), stdev_y = standardDeviation(array_y, countLine);
 
     //find a, b in y = ax + b
     //a is slope
-    slope = (r * stdev.y)/stdev.x;
+    slope = (r * stdev_y)/stdev_x;
     //b is intercept
-    intercept = m.y - slope * m.x;
+    intercept = m_y - slope * m_x;
 
     //output the equation
     cout << "The linear equation: y = " << slope << "x + " << intercept << endl;
@@ -218,6 +188,7 @@ int main() {
 
     ip.close();
     showTeamInformation();
+    int m_x = mean(array_x, countLine), m_y = mean(array_y, countLine);
     return 0;
 }
 
