@@ -71,7 +71,7 @@ answers mean(int* array_x, int* array_y, int countLine) {
     m.x = sum_x / countLine;
     m.y = sum_y / countLine;
     return m;
-};
+}
 ////Function to calculate Median: https://www.tutorialspoint.com/program-for-mean-and-median-of-an-unsorted-array-in-cplusplus
 double median(int* array_x, int* array_y, int countLine) {
 
@@ -82,14 +82,14 @@ double median(int* array_x, int* array_y, int countLine) {
     else {
         return (double)(array_x[(countLine - 1) / 2] + array_x[countLine / 2]) / 2.0;
         return (double)(array_y[(countLine - 1) / 2] + array_y[countLine / 2]) / 2.0;
-    };
+    }
 
     //Function to find Mode
 
 
     ////Function to calculate Variance
     answers variance(int* array_x, int* array_y, int countLine) {
-        answers Vari;
+        answers vari;
         // Compute sum squared
         // differences with mean.
         double squaredDiff_x = 0;
@@ -98,17 +98,17 @@ double median(int* array_x, int* array_y, int countLine) {
             squaredDiff_x += (array_x[i] - mean) * (array_x[i] - mean);
             squaredDiff_y += (array_y[i] - mean) * (array_y[i] - mean);
         }
-        Vari.x = squaredDiff_x / countLine;
-        Vari.y = squaredDiff_y / countLine;
-        return Vari;
-    };
+        vari.x = squaredDiff_x / countLine;
+        vari.y = squaredDiff_y / countLine;
+        return vari;
+    }
     ////Function to calculate Deviation
     answers standardDeviation(int* array_x, int* array_y, int countLine) {
         answers stdDevi;
         stdDevi.x = sqrt(variance(array_x, countLine))
         stdDevi.y = sqrt(variance(array_y, countLine))
         return stdDevi;
-    };
+    }
 
     //Function to calculate MAD
     answers meanAbsoluteDeviation(int* array_x, int* array_y, int countLine) {
@@ -124,19 +124,50 @@ double median(int* array_x, int* array_y, int countLine) {
         MAD.x = absSum_x / countLine;
         MAD.y = absSum_y / countLine;
         return MAD;
-    };
+    }
 
     ////Function to calculate First Quartile
 
 
     //// Function to calculate skewness.
 
-    float skewness(int* array_x, int* array_y, int countLine{
-        float sum = 0;
-        for (int i = 0; i < countLine; i++)
-            sum = (arr[i] - mean(arr, countLine)) * (arr[i] - mean(arr, countLine)) * (arr[i] - mean(arr, countLine));
-        return sum / (countLine * standardDeviation(arr, countLine) * standardDeviation(arr, countLine) * standardDeviation(arr, countLine) * standardDeviation(arr, countLine));
-    };
+    answers skewness(int* array_x, int* array_y, int countLine {
+        answers skew;
+        float sum_x = 0;
+        float sum_y = 0;
+        for (int i = 0; i < countLine; i++) {
+            sum_x = (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine)) *  (array_x[i] - mean(array_x, countLine));
+            sum_y = (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine)) *   (array_y[i] - mean(array_y, countLine));
+        }
+        skew.x = sum_x / (countLine * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine) *  standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine));
+        skew.y = sum_y / (countLine * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine) *  standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine));
+        return skew;
+    }
+
+    ////Function to calculate Kurtosis
+    answers kurtosis(int* array_x, int* array_y, int countLine){
+        answers kurt;
+        float sum_x = 0;
+        float sum_y = 0;
+        double kurtosis_x = 0;
+        double kurtosis_y = 0;
+        for (int i = 1; i < countLine; i++){
+            sum_x = (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine)) *  (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine));
+            sum_y = (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine)) *  (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine));
+        }
+        kurt.x = (sum_x / (countLine * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine) *  standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine))) - 3 ;
+        kurt.y = (sum_y / (countLine * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine) *  standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine))) - 3 ;
+        return kurt;
+    }
+
+
+
+
+    }
+
+
+
+
 
 int main() {
     //declare variables
