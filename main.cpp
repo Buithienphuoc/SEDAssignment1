@@ -7,9 +7,8 @@
 using namespace std;
 
 typedef struct {
-    public:
         int x, y;
-} Answers;
+} answers;
 
 void showTeamInformation(){
     cout << "ASSIGNMENT 1GROUP<TT>" << endl
@@ -56,16 +55,61 @@ void storeFileIntoArrays(int *array_x, int *array_y, string str, ifstream& ip) {
         index ++;
     }
 }
-void doExercise1(){
+double covariance(int *array_x, int *array_y, answers median, int countLine) {
+    double sum = 0;
+    for (int index = 1; index < countLine; index ++) {
+        sum += ((array_x[index] - median.x)*(array_y[index] - median.y));
+    }
+    return (sum / (countLine - 1));
+}
+double coefficient(int *array_x, int *array_y, int countLine) {
+    double squareSum_x = 0, squareSum_y = 0;
+    long int sum_x = 0, sum_y = 0, sum_xy = 0;
+    for (int i = 1; i < countLine; i ++) {
+        sum_xy += (array_x[i] * array_y[i]);
+        squareSum_x += pow(array_x[i], 2);
+        squareSum_y += pow(array_y[i], 2);
+        sum_x += array_x[i];
+        sum_y += array_y[i];
+    }
+    double denominator = sqrt((countLine * squareSum_x - pow(sum_x,2))
+            *(countLine * squareSum_y - pow(sum_y, 2)));
+    return ((double)(countLine * sum_xy - sum_x * sum_y)/denominator);
+}
+answers mean(int *array_x, int *array_y, int countLine) {
+    answers m;
+    int sum_x = 0, sum_y = 0;
+     for (int i = 0; i < countLine; i ++) {
+         sum_x += array_x[i];
+         sum_y += array_y[i];
+     }
+     m.x = sum_x / countLine;
+     m.y = sum_y / countLine;
+     return m;
+}
+void linearRegression(int *array_x, int *array_y, int countLine) {
+    //initialize the variables
+    double r = coefficient(array_x, array_y, countLine), slope, intercept;
+    answers m = mean(array_x, array_y, countLine), stdev = standardDeviation(array_x, array_y, countLine);
+
+    //find a, b in y = ax + b
+    //a is slope
+    slope = (r * stdev.y)/stdev.x;
+    //b is intercept
+    intercept = m.y - slope * m.x;
+
+    //output the equation
+    cout << "The linear equation: y = " << slope << "x + " << intercept << endl;
+}
+void printDouble(double num) {
 
 }
-
 // Main function:
 int main() {
     ifstream ip;
     //declare variables
     string filePath, str, str2;
-    int count_line, *array_x, *array_y;
+    int countLine, *array_x, *array_y;
 
     //ask user to input file's address
     cout << "Hi Dr.Minh Dinh, please type your ABSOLUTE PATH of your file:";
@@ -75,11 +119,11 @@ int main() {
     openFile(filePath, ip);
 
     //start inputting the program contents of csv file
-    count_line = findNumberOfLines(str, ip);
+    countLine = findNumberOfLines(str, ip);
     returnToBeginOfFile(ip);
     // create array to store x and y with dynamic memory allocation
-    array_x = new int[count_line];
-    array_y = new int[count_line];
+    array_x = new int[countLine];
+    array_y = new int[countLine];
     storeFileIntoArrays(array_x, array_y, str, ip);
 
     //output array
