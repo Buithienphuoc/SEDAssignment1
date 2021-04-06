@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string.h>
 #include <fstream>
-#include <cmath>
+#include <math.h>
 #include <iomanip>
 
 using namespace std;
@@ -56,9 +56,89 @@ void storeFileIntoArrays(Contents *array, string str, string str2, ifstream& ip)
         index ++;
     }
 }
-void doExercise1(){
-    // add your code here
-}
+
+
+////MATH FUNCTIONS:
+
+////Function to calculate Mean
+answers mean(int* array_x, int * array_y, int countLine){
+    answers m;
+        // Calculate sum of all elements.
+        int sum_x = 0;
+        int sum_y = 0;
+        for (int i = 0; i < countLine; i++) {
+            sum_x += array_x[i];
+            sum_y += array_y[i];
+        }
+        m.x = sum_x/countLine;
+        m.y = sum_y/countLine;
+        return m;
+    };
+////Function to calculate Median: https://www.tutorialspoint.com/program-for-mean-and-median-of-an-unsorted-array-in-cplusplus
+double median(int* array_x, int* array_y, int countLine){
+
+    if (countLine % 2 != 0){
+        return (double)array_x[countLine/2];
+        return (double)array_y[countLine/2];}
+    else {
+        return (double) (array_x[(countLine - 1) / 2] + array_x[countLine / 2]) / 2.0;
+        return (double) (array_y[(countLine - 1) / 2] + array_y[countLine / 2]) / 2.0;
+};
+
+//Function to find Mode
+
+
+////Function to calculate Variance
+answers variance(int* array_x, int* array_y, int countLine) {
+    answers Vari;
+    // Compute sum squared
+    // differences with mean.
+    double squaredDiff_x = 0;
+    double squaredDiff_y = 0;
+    for (int i = 0; i < countLine; i++) {
+        squaredDiff_x += (array_x[i] - mean) * (array_x[i] - mean);
+        squaredDiff_y += (array_y[i] - mean) * (array_y[i] - mean);
+    }
+    Vari.x = squaredDiff_x / countLine;
+    Vari.y = squaredDiff_y / countLine;
+    return Vari;
+};
+////Function to calculate Deviation
+answers standardDeviation(int* array_x, int* array_y,int countLine){
+    answers stdDevi;
+    stdDevi.x = sqrt(variance(array_x, countLine))
+    stdDevi.y = sqrt(variance(array_y, countLine))
+    return stdDevi;
+};
+
+//Function to calculate MAD
+answers meanAbsoluteDeviation(int* array_x, int* array_y, int countLine){
+    // Calculate the sum of absolute
+    answers MAD;
+    // deviation about mean.
+    float absSum = 0;
+    for (int i = 0; i < countLine; i++) {
+        absSum_x = absSum + abs(array_x[i] - mean(array_x, countLine));
+        absSum_y = absSum + abs(array_y[i] - mean(array_y, countLine));
+    }
+    // Return mean absolute deviation about mean.
+    MAD.x = absSum_x / countLine;
+    MAD.y = absSum_y / countLine;
+    return MAD;
+};
+
+////Function to calculate First Quartile
+
+
+//// Function to calculate skewness.
+
+float skewness(int* array_x, int* array_y, int countLine{
+    float sum = 0;
+    for (int i = 0; i < countLine; i++)
+        sum = (arr[i] - mean(arr, countLine)) *  (arr[i] - mean(arr, countLine)) *  (arr[i] - mean(arr, countLine));
+    return sum / (countLine * standardDeviation(arr, countLine) * standardDeviation(arr, countLine) * standardDeviation(arr, countLine) * standardDeviation(arr, countLine));
+};
+
 
 // Main function:
 int main() {
@@ -83,11 +163,13 @@ int main() {
     storeFileIntoArrays(array, str, str2, ip);
 
     //output array
-    // outArray(array, count_line);
+    // outArray(array, countLine);
 
     ip.close();
     showTeamInformation();
     return 0;
+
+}
 }
 
 // Function detail:
