@@ -151,7 +151,7 @@ double median(int* array_x, int* array_y, int countLine) {
         float sum_y = 0;
         double kurtosis_x = 0;
         double kurtosis_y = 0;
-        for (int i = 1; i < countLine; i++){
+        for (int i = 0; i < countLine; i++){
             sum_x = (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine)) *  (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine));
             sum_y = (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine)) *  (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine));
         }
