@@ -55,6 +55,103 @@ void storeFileIntoArrays(int *array_x, int *array_y, string str, ifstream& ip) {
         index ++;
     }
 }
+////Math functions:
+
+answers mean(int *array_x, int *array_y, int countLine) {
+    answers m;
+    int sum_x = 0, sum_y = 0;
+    for (int i = 0; i < countLine; i ++) {
+        sum_x += array_x[i];
+        sum_y += array_y[i];
+    }
+    m.x = sum_x / countLine;
+    m.y = sum_y / countLine;
+    return m;
+}
+
+double median(int* array_x, int* array_y, int countLine) {
+
+    if (countLine % 2 != 0) {
+        return array_x[countLine / 2];
+        return array_y[countLine / 2];
+    } else {
+        return (array_x[(countLine - 1) / 2] + array_x[countLine / 2]) / 2;
+        return (array_y[(countLine - 1) / 2] + array_y[countLine / 2]) / 2;
+    }
+}
+////Function to calculate Variance
+answers variance(int* array_x, int* array_y, int countLine) {
+    answers vari;
+    // Compute sum squared
+    // differences with mean.
+    double squaredDiff_x = 0;
+    double squaredDiff_y = 0;
+    for (int i = 0; i < countLine; i++) {
+        squaredDiff_x += (array_x[i] - mean) * (array_x[i] - mean);
+        squaredDiff_y += (array_y[i] - mean) * (array_y[i] - mean);
+    }
+    vari.x = squaredDiff_x / countLine;
+    vari.y = squaredDiff_y / countLine;
+    return vari;
+    }
+
+    ////Function to calculate Deviation
+    answers standardDeviation(int* array_x, int* array_y, int countLine, answers variance) {
+        answers stdDevi;
+        stdDevi.x = sqrt(variance(array_x, countLine));
+        stdDevi.y = sqrt(variance(array_y, countLine));
+        return stdDevi;
+    }
+
+    //Function to calculate MAD
+    answers meanAbsoluteDeviation(int* array_x, int* array_y, int countLine, answers mean) {
+        answers MAD;
+        float absSum_x = 0;
+        float absSum_y = 0;
+        for (int i = 0; i < countLine; i++) {
+            absSum_x = absSum_x + abs(array_x[i] - mean(array_x, countLine));
+            absSum_y = absSum_y + abs(array_y[i] - mean(array_y, countLine));
+        }
+        // Return mean absolute deviation about mean.
+        MAD.x = absSum_x / countLine;
+        MAD.y = absSum_y / countLine;
+        return MAD;
+    }
+
+    ////Function to calculate First Quartile
+
+
+    //// Function to calculate skewness.
+
+    answers skewness(int* array_x, int* array_y, int countLine){
+        answers skew;
+        float sum_x = 0;
+        float sum_y = 0;
+        for (int i = 0; i < countLine; i++) {
+            sum_x = (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine));
+            sum_y = (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine));
+        }
+        skew.x = sum_x / (countLine * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine));
+        skew.y = sum_y / (countLine * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine));
+        return skew;
+    }
+
+    ////Function to calculate Kurtosis
+    answers kurtosis(int* array_x, int* array_y, int countLine) {
+        answers kurt;
+        float sum_x = 0;
+        float sum_y = 0;
+        double kurtosis_x = 0;
+        double kurtosis_y = 0;
+        for (int i = 0; i < countLine; i++) {
+            sum_x = (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine));
+            sum_y = (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine));
+        }
+        kurt.x = (sum_x / (countLine * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine))) - 3;
+        kurt.y = (sum_y / (countLine * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine))) - 3;
+        return kurt;
+    }
+}
 double covariance(int *array_x, int *array_y, answers median, int countLine) {
     double sum = 0;
     for (int index = 1; index < countLine; index ++) {
@@ -76,17 +173,7 @@ double coefficient(int *array_x, int *array_y, int countLine) {
             *(countLine * squareSum_y - pow(sum_y, 2)));
     return ((double)(countLine * sum_xy - sum_x * sum_y)/denominator);
 }
-answers mean(int *array_x, int *array_y, int countLine) {
-    answers m;
-    int sum_x = 0, sum_y = 0;
-     for (int i = 0; i < countLine; i ++) {
-         sum_x += array_x[i];
-         sum_y += array_y[i];
-     }
-     m.x = sum_x / countLine;
-     m.y = sum_y / countLine;
-     return m;
-}
+
 void linearRegression(int *array_x, int *array_y, int countLine) {
     //initialize the variables
     double r = coefficient(array_x, array_y, countLine), slope, intercept;
