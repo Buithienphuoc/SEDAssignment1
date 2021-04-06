@@ -1,8 +1,14 @@
 #include <iostream>
+#include <string.h>
 #include <fstream>
 #include <cmath>
+#include <iomanip>
 
 using namespace std;
+
+typedef struct {
+        int x, y;
+} answers;
 
 void showTeamInformation(){
     cout << "ASSIGNMENT 1GROUP<TT>" << endl
@@ -40,143 +46,70 @@ int strToInt(string str) {
     return num;
 }
 void storeFileIntoArrays(int *array_x, int *array_y, string str, ifstream& ip) {
-    int index = 0; //run i 1++, b/c i 0 is 'x','y'
-    while (!ip.eof()) {
+    int index = 0; //run index 1++, b/c index 0 is 'x','y'
+    while (ip.good()) {
         getline(ip, str, ',');
         array_x[index] = strToInt(str);
         getline(ip, str, '\n');
         array_y[index] = strToInt(str);
         index ++;
     }
-    cout << "Number of line:" <<index << endl;
-
-    for (int element = 1; element < index ; element++){
-        cout << element << " place of Array X:" << array_x[element] << endl
-             << element << " place of Array Y:" << array_y[element] << endl
-             << "--------------------------" << endl;
-    }
 }
-////MATH FUNCTIONS:
-
-////Function to calculate Mean
-answers mean(int* array_x, int* array_y, int countLine) {
-    answers m;
-    // Calculate sum of all elements.
-    int sum_x = 0;
-    int sum_y = 0;
-    for (int i = 0; i < countLine; i++) {
+double covariance(int *array_x, int *array_y, answers median, int countLine) {
+    double sum = 0;
+    for (int index = 1; index < countLine; index ++) {
+        sum += ((array_x[index] - median.x)*(array_y[index] - median.y));
+    }
+    return (sum / (countLine - 1));
+}
+double coefficient(int *array_x, int *array_y, int countLine) {
+    double squareSum_x = 0, squareSum_y = 0;
+    long int sum_x = 0, sum_y = 0, sum_xy = 0;
+    for (int i = 1; i < countLine; i ++) {
+        sum_xy += (array_x[i] * array_y[i]);
+        squareSum_x += pow(array_x[i], 2);
+        squareSum_y += pow(array_y[i], 2);
         sum_x += array_x[i];
         sum_y += array_y[i];
     }
-    m.x = sum_x / countLine;
-    m.y = sum_y / countLine;
-    return m;
+    double denominator = sqrt((countLine * squareSum_x - pow(sum_x,2))
+            *(countLine * squareSum_y - pow(sum_y, 2)));
+    return ((double)(countLine * sum_xy - sum_x * sum_y)/denominator);
 }
-////Function to calculate Median: https://www.tutorialspoint.com/program-for-mean-and-median-of-an-unsorted-array-in-cplusplus
-double median(int* array_x, int* array_y, int countLine) {
+answers mean(int *array_x, int *array_y, int countLine) {
+    answers m;
+    int sum_x = 0, sum_y = 0;
+     for (int i = 0; i < countLine; i ++) {
+         sum_x += array_x[i];
+         sum_y += array_y[i];
+     }
+     m.x = sum_x / countLine;
+     m.y = sum_y / countLine;
+     return m;
+}
+void linearRegression(int *array_x, int *array_y, int countLine) {
+    //initialize the variables
+    double r = coefficient(array_x, array_y, countLine), slope, intercept;
+    answers m = mean(array_x, array_y, countLine), stdev = standardDeviation(array_x, array_y, countLine);
 
-    if (countLine % 2 != 0) {
-        return (double)array_x[countLine / 2];
-        return (double)array_y[countLine / 2];
-    }
-    else {
-        return (double)(array_x[(countLine - 1) / 2] + array_x[countLine / 2]) / 2.0;
-        return (double)(array_y[(countLine - 1) / 2] + array_y[countLine / 2]) / 2.0;
-    }
+    //find a, b in y = ax + b
+    //a is slope
+    slope = (r * stdev.y)/stdev.x;
+    //b is intercept
+    intercept = m.y - slope * m.x;
 
-    //Function to find Mode
+    //output the equation
+    cout << "The linear equation: y = " << slope << "x + " << intercept << endl;
+}
+void printDouble(double num) {
 
-
-    ////Function to calculate Variance
-    answers variance(int* array_x, int* array_y, int countLine) {
-        answers vari;
-        // Compute sum squared
-        // differences with mean.
-        double squaredDiff_x = 0;
-        double squaredDiff_y = 0;
-        for (int i = 0; i < countLine; i++) {
-            squaredDiff_x += (array_x[i] - mean) * (array_x[i] - mean);
-            squaredDiff_y += (array_y[i] - mean) * (array_y[i] - mean);
-        }
-        vari.x = squaredDiff_x / countLine;
-        vari.y = squaredDiff_y / countLine;
-        return vari;
-    }
-    ////Function to calculate Deviation
-    answers standardDeviation(int* array_x, int* array_y, int countLine) {
-        answers stdDevi;
-        stdDevi.x = sqrt(variance(array_x, countLine))
-        stdDevi.y = sqrt(variance(array_y, countLine))
-        return stdDevi;
-    }
-
-    //Function to calculate MAD
-    answers meanAbsoluteDeviation(int* array_x, int* array_y, int countLine) {
-        // Calculate the sum of absolute
-        answers MAD;
-        // deviation about mean.
-        float absSum = 0;
-        for (int i = 0; i < countLine; i++) {
-            absSum_x = absSum + abs(array_x[i] - mean(array_x, countLine));
-            absSum_y = absSum + abs(array_y[i] - mean(array_y, countLine));
-        }
-        // Return mean absolute deviation about mean.
-        MAD.x = absSum_x / countLine;
-        MAD.y = absSum_y / countLine;
-        return MAD;
-    }
-
-    ////Function to calculate First Quartile
-
-
-    //// Function to calculate skewness.
-
-    answers skewness(int* array_x, int* array_y, int countLine {
-        answers skew;
-        float sum_x = 0;
-        float sum_y = 0;
-        for (int i = 0; i < countLine; i++) {
-            sum_x = (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine)) *  (array_x[i] - mean(array_x, countLine));
-            sum_y = (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine)) *   (array_y[i] - mean(array_y, countLine));
-        }
-        skew.x = sum_x / (countLine * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine) *  standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine));
-        skew.y = sum_y / (countLine * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine) *  standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine));
-        return skew;
-    }
-
-    ////Function to calculate Kurtosis
-    answers kurtosis(int* array_x, int* array_y, int countLine){
-        answers kurt;
-        float sum_x = 0;
-        float sum_y = 0;
-        double kurtosis_x = 0;
-        double kurtosis_y = 0;
-        for (int i = 0; i < countLine; i++){
-            sum_x = (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine)) *  (array_x[i] - mean(array_x, countLine)) * (array_x[i] - mean(array_x, countLine));
-            sum_y = (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine)) *  (array_y[i] - mean(array_y, countLine)) * (array_y[i] - mean(array_y, countLine));
-        }
-        kurt.x = (sum_x / (countLine * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine) *  standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine) * standardDeviation(array_x, countLine))) - 3 ;
-        kurt.y = (sum_y / (countLine * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine) *  standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine) * standardDeviation(array_y, countLine))) - 3 ;
-        return kurt;
-    }
-
-
-
-
-    }
-
-
-
-
-
+}
+// Main function:
 int main() {
-    //declare variables
     ifstream ip;
+    //declare variables
     string filePath, str, str2;
-    int count_line, *array_x, *array_y;
-    count_line = findNumberOfLines(str, ip);
-    array_x = new int[count_line];
-    array_y = new int[count_line];
+    int countLine, *array_x, *array_y;
 
     //ask user to input file's address
     cout << "Hi Dr.Minh Dinh, please type your ABSOLUTE PATH of your file:";
@@ -186,12 +119,19 @@ int main() {
     openFile(filePath, ip);
 
     //start inputting the program contents of csv file
+    countLine = findNumberOfLines(str, ip);
     returnToBeginOfFile(ip);
     // create array to store x and y with dynamic memory allocation
-
+    array_x = new int[countLine];
+    array_y = new int[countLine];
     storeFileIntoArrays(array_x, array_y, str, ip);
+
+    //output array
+    // outArray(array, count_line);
 
     ip.close();
     showTeamInformation();
     return 0;
 }
+
+// Function detail:
